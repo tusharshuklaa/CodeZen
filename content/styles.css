@@ -1,0 +1,38 @@
+/* Mode */
+
+._codeZen_mode_fm .site-footer,
+._codeZen_mode_zen .site-footer {
+  display: none;
+}
+
+._codeZen_mode_fm .main-header,
+._codeZen_mode_zen .main-header {
+  display: none;
+}
+
+._codeZen_mode_fm body,
+._codeZen_mode_zen body {
+  padding-bottom: 0px;
+}
+
+._codeZen_mode_fm .powers .mini-button,
+._codeZen_mode_zen .powers .mini-button {
+  display: none;
+}
+
+._codeZen_mode_fm .powers,
+._codeZen_mode_zen .powers {
+  padding: 2px 5px 2px 0;
+}
+
+._codeZen_mode_fm .box-title,
+._codeZen_mode_zen .box-title {
+  font-size: 0.7em;
+}
+
+._codeZen_mode_fm .editor-actions-left,
+._codeZen_mode_zen .editor-actions-left {
+  line-height: 0.5;
+}
+
+/* Mode End */
