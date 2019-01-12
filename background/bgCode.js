@@ -7,34 +7,43 @@ const CodeZenBG = (function (chrome) {
   // These are the context menus available on the page
   // ID and Key name has to be same
   const _CONTEXT_MENUS = {
-    "zen": {
-      "id": "zen",
-      "name": "Zen Mode",
-      "className": "_codeZen_fm"
-    },
-    "focus": {
-      "id": "focus",
-      "name": "Focus Mode"
+    "modes": {
+      "id": "mode",
+      "title": "View Modes",
+      "children": [{
+        "id": "normal",
+        "title": "Normal",
+        "type": "radio"
+      },
+      {
+        "id": "zen",
+        "title": "Zen",
+        "type": "radio"
+      }, {
+        "id": "focus",
+        "title": "Focus",
+        "type": "radio"
+      }]
     },
     "fav": {
       "id": "fav",
-      "name": "Add to Favourites"
+      "title": "Add to Favourites"
     },
     "vFav": {
       "id": "vFav",
-      "name": "View Favourites"
+      "title": "View Favourites"
     }
   };
 
-  const _DEFAULT_SETTING = {};
-  const _preFix = EXT_NAME + "_-_";
-  _DEFAULT_SETTING[_preFix + _CONTEXT_MENUS.zen.id] = false;
-  _DEFAULT_SETTING[_preFix + _CONTEXT_MENUS.focus.id] = false;
+  const _CONTEXT_MENUS_CONTEXT = ["all"];
+  // const _DEFAULT_SETTING = {};
+  // const _preFix = EXT_NAME + "_-_";
+  // _DEFAULT_SETTING[_preFix + _CONTEXT_MENUS.modes.zen.id] = false;
+  // _DEFAULT_SETTING[_preFix + _CONTEXT_MENUS.modes.focus.id] = false;
 
   const init = function () {
     handleDeclarativeContent();
     setDefaults();
-    createContextMenus();
   };
 
   const handleDeclarativeContent = function () {
@@ -58,25 +67,44 @@ const CodeZenBG = (function (chrome) {
   };
 
   const createCm = function () {
-    Object.entries(_CONTEXT_MENUS).forEach(([key, value]) => {
-      chrome.contextMenus.create({
-        "title": value.name,
-        "id": EXT_NAME + value.id,
-        "contexts": ["all"]
-      });
+    for (const m in _CONTEXT_MENUS) {
+      const menu = _CONTEXT_MENUS[m];
+      if (_CONTEXT_MENUS.hasOwnProperty(m) && typeof menu === "object") {
+        menu.id = EXT_NAME + menu.id;
+        menu.contexts = _CONTEXT_MENUS_CONTEXT;
+        if (menu.children) {
+          const {
+            children,
+            ..._menu
+          } = menu;
+          _createMenu(_menu);
+          children.forEach(c => {
+            c.parentId = menu.id;
+            c.id = menu.id + "_-_" + c.id;
+            c.contexts = _CONTEXT_MENUS_CONTEXT;
+            if (c.id.indexOf("normal") > -1) {
+              c.checked = true;
+            }
+            _createMenu(c);
+          });
+        } else {
+          _createMenu(menu);
+        }
+      }
+    }
+  };
+
+  const _createMenu = function (menu) {
+    chrome.contextMenus.create(menu);
+  };
+
+  const _initCmHandlers = function () {
+    chrome.contextMenus.onClicked.addListener(i => {
+      _sendModeRequest(i.menuItemId);
     });
   };
 
-  const _initCmHandlers = function() {
-    chrome.contextMenus.onClicked.addListener(function (itemData) {
-      if (itemData.menuItemId === EXT_NAME + _CONTEXT_MENUS.zen.id)
-        _sendModeRequest(_CONTEXT_MENUS.zen.id);
-      if (itemData.menuItemId === EXT_NAME + _CONTEXT_MENUS.focus.id)
-        _sendModeRequest(_CONTEXT_MENUS.focus.id);
-    });
-  };
-
-  const _sendModeRequest = function(mode) {
+  const _sendModeRequest = function (mode) {
     chrome.tabs.query({
       active: true,
       currentWindow: true
@@ -84,15 +112,15 @@ const CodeZenBG = (function (chrome) {
       chrome.tabs.sendMessage(tabs[0].id, {
         _czMode: mode
       }, function (response) {
-        console.log(mode + "mode request was sent and current status is -> ", response.status);
+        // console.log(mode + "mode request was sent and current status is -> ", response.status);
       });
     });
   };
 
   const setDefaults = function () {
-    chrome.storage.sync.set(_DEFAULT_SETTING, function () {
-      console.log("DEFAULT SETTING: ", _DEFAULT_SETTING);
-    });
+    // chrome.storage.sync.set(_DEFAULT_SETTING, function () {
+    //   console.log("DEFAULT SETTING: ", _DEFAULT_SETTING);
+    // });
   };
 
   /**
@@ -100,7 +128,8 @@ const CodeZenBG = (function (chrome) {
    *
    */
   const pageNavigated = function () {
-    alert("Welcome to CodePen! You can use the Code Pen Tools now!");
+    // alert("Welcome to CodePen! You can use the Code Pen Tools now!");
+    createContextMenus();
   };
 
   // Public Properties
