@@ -32,7 +32,7 @@ const CodeZenBG = (function (chrome) {
       "id": "changeView",
       "title": "Change View",
       "children": [{
-        "id": "editor",
+        "id": "pen",
         "title": "Editor",
         "type": "radio",
         "checked": true

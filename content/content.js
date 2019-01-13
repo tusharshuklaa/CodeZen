@@ -1,4 +1,6 @@
 const CZUtils = (function() {
+  const classPrefix = "_codeZen_mode_";
+
   const makeEnum = function (arr) {
     return arr.reduce(function (acc, cv, i) {
       const idx = ++i;
@@ -62,48 +64,25 @@ const CZUtils = (function() {
     isFullScreen: isFullScreen,
     fullScreen: fullScreen,
     elems: elems,
-    elem: sel => elems(sel)[0]
+    elem: sel => elems(sel)[0],
+    classPrefix: classPrefix
   };
 })();
 
-const CodeZenContent = (function (u) {
-  const classPrefix = "_codeZen_mode_";
-  const cmItems = ["mode", "changeView", "layout", "fav"];
-  const cmEnum = u.makeEnum(cmItems);
+const CZMode = (function(u){
+  let _INIT_EDITOR_PANE_WIDTH = "";
   const mode = {
     "zen": {
       "id": "zen",
-      "className": classPrefix + "zen"
+      "className": u.classPrefix + "zen"
     },
     "focus": {
       "id": "focus",
-      "className": classPrefix + "fm"
+      "className": u.classPrefix + "fm"
     },
     "normal": {
       "id": "normal"
     }
-  };
-
-  let _INIT_EDITOR_PANE_WIDTH = "";
-
-  const init = function () {
-    initListeners();
-  };
-
-  const initListeners = function () {
-    chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-      const reqType = getReqType(request);
-      switch(reqType) {
-      case cmEnum[cmEnum.mode]: _initMode(request._czMode);
-        break;
-
-      default:
-        console.log("No request", reqType);
-      }
-      sendResponse({
-        status: "active"
-      });
-    });
   };
 
   const _initMode = function (type) {
@@ -126,7 +105,7 @@ const CodeZenContent = (function (u) {
 
   const _resetMode = function (rootElem, fs) {
     rootElem.classList.forEach(className => {
-      if (className.startsWith(classPrefix)) {
+      if (className.startsWith(u.classPrefix)) {
         rootElem.classList.remove(className);
       }
     });
@@ -162,6 +141,77 @@ const CodeZenContent = (function (u) {
     return className;
   };
 
+  return {
+    init: _initMode
+  };
+})(CZUtils);
+
+const CZView = (function(u) {
+  const url = document.location.href,
+    domain = "https://codepen.io",
+    URLMeta = url.split(domain)[1],
+    URLDetails = URLMeta.split("/"),
+    userName = URLDetails[1],
+    currView = URLDetails[2],
+    penId = URLDetails[3],
+    view = [
+      "pen",
+      "details",
+      "full",
+      "debug",
+      "live",
+      "collab",
+      "professor",
+      "pres"
+    ];
+
+  const getViewType = function(type) {
+    return view.filter(v => type.indexOf(v) > -1)[0];
+  };
+
+  const initChangeView = function(type) {
+    if(type.indexOf(currView) === -1) {
+      const targetView = getViewType(type);
+      goToView(targetView);
+    }
+  };
+
+  const goToView = function(view) {
+    document.location.href = [domain, userName, view, penId].join("/");
+  };
+
+  return {
+    init: initChangeView
+  };
+})(CZUtils);
+
+const CodeZenMain = (function (u, mode, view) {
+  const cmItems = ["mode", "changeView", "layout", "fav"];
+  const cmEnum = u.makeEnum(cmItems);
+
+  const init = function () {
+    initListeners();
+  };
+
+  const initListeners = function () {
+    chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+      const reqType = getReqType(request);
+      switch(reqType) {
+      case cmEnum[cmEnum.mode]: mode.init(request._czMode);
+        break;
+
+      case cmEnum[cmEnum.changeView]: view.init(request._czMode);
+        break;
+
+      default:
+        console.log("No request", reqType);
+      }
+      sendResponse({
+        status: "active"
+      });
+    });
+  };
+
   const getReqType = function(req) {
     return cmItems.filter(cm => req._czMode.indexOf(cmEnum[cmEnum[cm]]) > -1)[0];
   };
@@ -170,6 +220,6 @@ const CodeZenContent = (function (u) {
     init: init
   };
 
-})(CZUtils);
+})(CZUtils, CZMode, CZView);
 
-CodeZenContent.init();
+CodeZenMain.init();
