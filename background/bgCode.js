@@ -1,19 +1,22 @@
 const CodeZenBG = (function (chrome) {
   "use strict";
 
+  const _SCHEME = "https://";
   const _HOST = "codepen.io";
-  const URL = "https://" + _HOST + "/";
+  const URL = _SCHEME + _HOST + "/";
+  const FRAME_URL = _SCHEME + "s." + _HOST + "/";
   const EXT_NAME = "CodeZen";
   // These are the context menus available on the page
   // ID and Key name has to be same
   const _CONTEXT_MENUS = {
     "modes": {
       "id": "mode",
-      "title": "View Modes",
+      "title": "Mode",
       "children": [{
         "id": "normal",
         "title": "Normal",
-        "type": "radio"
+        "type": "radio",
+        "checked": true
       },
       {
         "id": "zen",
@@ -25,13 +28,65 @@ const CodeZenBG = (function (chrome) {
         "type": "radio"
       }]
     },
+    "view": {
+      "id": "changeView",
+      "title": "Change View",
+      "children": [{
+        "id": "editor",
+        "title": "Editor",
+        "type": "radio",
+        "checked": true
+      }, {
+        "id": "details",
+        "title": "Details",
+        "type": "radio"
+      }, {
+        "id": "fullPage",
+        "title": "Full Page",
+        "type": "radio"
+      }, {
+        "id": "debug",
+        "title": "Debug",
+        "type": "radio"
+      }, {
+        "id": "live",
+        "title": "Live (PRO)",
+        "type": "radio"
+      }, {
+        "id": "collab",
+        "title": "Collab (PRO)",
+        "type": "radio"
+      }, {
+        "id": "professor",
+        "title": "Professor (PRO)",
+        "type": "radio"
+      }, {
+        "id": "presentation",
+        "title": "Presentation (PRO)",
+        "type": "radio"
+      }]
+    },
+    "layout": {
+      "id": "layout",
+      "title": "Change Layout",
+      "children": [{
+        "id": "toLeft",
+        "title": "Left",
+        "type": "radio",
+        "checked": true
+      }, {
+        "id": "toTop",
+        "title": "Top",
+        "type": "radio"
+      }, {
+        "id": "toRight",
+        "title": "Right",
+        "type": "radio"
+      }]
+    },
     "fav": {
       "id": "fav",
       "title": "Add to Favourites"
-    },
-    "vFav": {
-      "id": "vFav",
-      "title": "View Favourites"
     }
   };
 
@@ -68,24 +123,15 @@ const CodeZenBG = (function (chrome) {
 
   const createCm = function () {
     for (const m in _CONTEXT_MENUS) {
-      const menu = _CONTEXT_MENUS[m];
+      const menu = JSON.parse(JSON.stringify(_CONTEXT_MENUS[m]));
       if (_CONTEXT_MENUS.hasOwnProperty(m) && typeof menu === "object") {
-        menu.id = EXT_NAME + menu.id;
-        menu.contexts = _CONTEXT_MENUS_CONTEXT;
+        _updateContextMenuConfig(menu);
         if (menu.children) {
-          const {
-            children,
-            ..._menu
-          } = menu;
+          const { children, ..._menu } = menu;
+          _menu.documentUrlPatterns = [URL + "*/pen/*", FRAME_URL + "*"];
           _createMenu(_menu);
           children.forEach(c => {
-            c.parentId = menu.id;
-            c.id = menu.id + "_-_" + c.id;
-            c.contexts = _CONTEXT_MENUS_CONTEXT;
-            if (c.id.indexOf("normal") > -1) {
-              c.checked = true;
-            }
-            _createMenu(c);
+            _createSubMenus(JSON.parse(JSON.stringify(c)), menu);
           });
         } else {
           _createMenu(menu);
@@ -96,6 +142,22 @@ const CodeZenBG = (function (chrome) {
 
   const _createMenu = function (menu) {
     chrome.contextMenus.create(menu);
+  };
+
+  const _updateContextMenuConfig = function(menu) {
+    menu.id = EXT_NAME + menu.id;
+    menu.contexts = _CONTEXT_MENUS_CONTEXT;
+    menu.documentUrlPatterns = [URL + "*", FRAME_URL + "*"];
+    menu.targetUrlPatterns = [URL + "*", FRAME_URL + "*"];
+  };
+
+  const _createSubMenus = function(c, menu) {
+    c.parentId = menu.id;
+    c.id = menu.id + "_-_" + c.id;
+    c.contexts = _CONTEXT_MENUS_CONTEXT;
+    c.targetUrlPatterns = [URL + "*", FRAME_URL + "*"];
+    c.documentUrlPatterns = [URL + "*/pen/*", FRAME_URL + "*"];
+    _createMenu(c);
   };
 
   const _initCmHandlers = function () {

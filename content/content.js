@@ -1,6 +1,75 @@
-const CodeZenContent = (function () {
+const CZUtils = (function() {
+  const makeEnum = function (arr) {
+    return arr.reduce(function (acc, cv, i) {
+      const idx = ++i;
+      if (!acc[cv]) {
+        acc[cv] = idx;
+        acc[idx] = cv;
+      }
+      return acc;
+    }, {});
+  };
 
+  const _fsOpen = function (elem) {
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) { /* Firefox */
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+      elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE/Edge */
+      elem.msRequestFullscreen();
+    }
+  };
+
+  const _fsClose = function () {
+    if (isFullScreen()) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) { /* Firefox */
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) { /* IE/Edge */
+        document.msExitFullscreen();
+      }
+    }
+  };
+
+  const isFullScreen = function () {
+    return document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullScreenElement;
+  };
+
+  const fullScreen = function (elem) {
+    function open() {
+      _fsOpen(elem);
+    }
+
+    return {
+      open: open,
+      close: _fsClose
+    };
+  };
+
+  const elems = function(sel) {
+    return document.querySelectorAll(sel);
+  };
+
+  return {
+    makeEnum: makeEnum,
+    isFullScreen: isFullScreen,
+    fullScreen: fullScreen,
+    elems: elems,
+    elem: sel => elems(sel)[0]
+  };
+})();
+
+const CodeZenContent = (function (u) {
   const classPrefix = "_codeZen_mode_";
+  const cmItems = ["mode", "changeView", "layout", "fav"];
+  const cmEnum = u.makeEnum(cmItems);
   const mode = {
     "zen": {
       "id": "zen",
@@ -23,7 +92,14 @@ const CodeZenContent = (function () {
 
   const initListeners = function () {
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-      _initMode(request._czMode);
+      const reqType = getReqType(request);
+      switch(reqType) {
+      case cmEnum[cmEnum.mode]: _initMode(request._czMode);
+        break;
+
+      default:
+        console.log("No request", reqType);
+      }
       sendResponse({
         status: "active"
       });
@@ -31,11 +107,11 @@ const CodeZenContent = (function () {
   };
 
   const _initMode = function (type) {
-    const rootElem = document.getElementsByTagName("html")[0],
-      editorPane = document.querySelectorAll("body.layout-side .top-boxes")[0],
+    const rootElem = u.elem("html"),
+      editorPane = u.elem("body.layout-side .top-boxes"),
       modeClass = _getClassName(type),
       isInTypeMode = rootElem.classList.contains(modeClass),
-      fs = _fullScreen(document.getElementsByTagName("body")[0]);
+      fs = u.fullScreen(u.elem("body"));
 
     if (!isInTypeMode) {
       _resetMode(rootElem, fs);
@@ -86,56 +162,14 @@ const CodeZenContent = (function () {
     return className;
   };
 
-  const _fullScreen = function (elem) {
-    function open() {
-      _fsOpen(elem);
-    }
-
-    return {
-      open: open,
-      close: _fsClose
-    };
-  };
-
-  const _fsOpen = function(elem) {
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen();
-    } else if (elem.mozRequestFullScreen) { /* Firefox */
-      elem.mozRequestFullScreen();
-    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-      elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) { /* IE/Edge */
-      elem.msRequestFullscreen();
-    }
-  };
-
-  const isFullScreen = function() {
-    return document.fullscreenElement ||
-      document.webkitFullscreenElement ||
-      document.mozFullScreenElement;
-  };
-
-  const _fsClose = function() {
-    if (isFullScreen()) {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.mozCancelFullScreen) { /* Firefox */
-        document.mozCancelFullScreen();
-      } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
-        document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) { /* IE/Edge */
-        document.msExitFullscreen();
-      }
-    }
+  const getReqType = function(req) {
+    return cmItems.filter(cm => req._czMode.indexOf(cmEnum[cmEnum[cm]]) > -1)[0];
   };
 
   return {
     init: init
   };
 
-})();
+})(CZUtils);
 
 CodeZenContent.init();
-
-// TODO: Issue with toggling from Zen mode to Focus Mode to Zen Mode
-// TODO: Issue with retaining editor panes width

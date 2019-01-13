@@ -42,6 +42,7 @@
         "IIFEs": false
       }
     ],
-    "no-alert": "error"
+    "no-alert": "error",
+    "no-console": "warn"
   }
 }
