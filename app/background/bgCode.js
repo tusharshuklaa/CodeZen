@@ -1,4 +1,6 @@
-const CodeZenBG = (function (chrome) {
+const CodeZenBG = {};
+
+(function (cz, chrome) {
   "use strict";
 
   const _SCHEME = "https://";
@@ -99,6 +101,7 @@ const CodeZenBG = (function (chrome) {
   const init = function () {
     handleDeclarativeContent();
     setDefaults();
+    createContextMenus();
   };
 
   const handleDeclarativeContent = function () {
@@ -171,12 +174,23 @@ const CodeZenBG = (function (chrome) {
       active: true,
       currentWindow: true
     }, function (tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, {
+      if(tabs && tabs.length) {
+        cz.activeTabId = tabs[0].id;
+      }
+      sendMsgToTab(mode);
+    });
+  };
+
+  const sendMsgToTab = function(mode) {
+    if (cz.activeTabId) {
+      chrome.tabs.sendMessage(cz.activeTabId, {
         _czMode: mode
       }, function (response) {
         // console.log(mode + "mode request was sent and current status is -> ", response.status);
       });
-    });
+    } else {
+      throw "There is no active tab (" + cz.activeTabId + ")!! Strange but true :(";
+    }
   };
 
   const setDefaults = function () {
@@ -191,14 +205,14 @@ const CodeZenBG = (function (chrome) {
    */
   const pageNavigated = function () {
     // alert("Welcome to CodePen! You can use the Code Pen Tools now!");
-    createContextMenus();
+    // createContextMenus();
   };
 
   // Public Properties
-  return {
-    init: init,
-    pageNavigated: pageNavigated,
-    URL: URL
-  };
+  cz.init = init;
+  cz.pageNavigated = pageNavigated;
+  cz.URL = URL;
+  // This is set in background.js on tab activated listener
+  cz.activeTabId = null;
 
-})(chrome);
+})(CodeZenBG, chrome);

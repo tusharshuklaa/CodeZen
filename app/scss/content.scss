@@ -1,0 +1,35 @@
+@import "_utils.scss";
+
+._codeZen_mode {
+  #{&}_fm,
+  #{&}_zen {
+
+    body {
+      padding-bottom: 0px;
+    }
+
+    .site-footer {
+      display: none;
+    }
+
+    .main-header {
+      display: none;
+    }
+
+    .powers {
+      padding: 2px 5px 2px 0;
+
+      .mini-button {
+        display: none;
+      }
+    }
+
+    .box-title {
+      font-size: 0.7em;
+    }
+
+    .editor-actions-left {
+      line-height: 0.5;
+    }
+  }
+}

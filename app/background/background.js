@@ -12,6 +12,10 @@ chrome.webNavigation.onCompleted.addListener(function () {
   }]
 });
 
+chrome.tabs.onActivated.addListener(function (activeInfo) {
+  CodeZenBG.activeTabId = activeInfo.tabId;
+});
+
 // TODO:
 // Add keybindings for most of the features
 // Update context menu about current editor view on every web navigation within codepen
@@ -36,4 +40,4 @@ chrome.webNavigation.onCompleted.addListener(function () {
 // Last visited date
 // Open html/css/js of current pen in new page
 // Link to Codepen Support and Documentation
-// Link to local Extension documentation page
+// Link to local Extension documentation

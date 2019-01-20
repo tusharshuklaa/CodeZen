@@ -6,13 +6,12 @@
   "description": "Tools to enhance overall experience on Codepen.io - An amazing frontend coding playground.",
   "background": {
     "scripts": [
-      "background/bgCode.js",
-      "background/background.js"
+      "bg.min.js"
     ],
     "persistent": false
   },
   "page_action": {
-    "default_popup": "popup/popup.html",
+    "default_popup": "popup.html",
     "default_icon": {
       "16": "images/get_started16.png",
       "32": "images/get_started32.png",
@@ -20,7 +19,7 @@
       "128": "images/get_started128.png"
     }
   },
-  "options_page": "options/options.html",
+  "options_page": "options.html",
   "icons": {
     "16": "images/get_started16.png",
     "32": "images/get_started32.png",
@@ -28,14 +27,16 @@
     "128": "images/get_started128.png"
   },
   "content_scripts": [{
-    "css": ["content/styles.css"],
-    "js": ["content/content.js"],
+    "css": ["content.css"],
+    "js": [
+      "content.min.js"
+    ],
     "matches": ["https://codepen.io/*"],
     "run_at": "document_end"
   }],
   "permissions": [
-    "declarativeContent", 
-    "activeTab", 
+    "declarativeContent",
+    "activeTab",
     "storage",
     "contextMenus",
     "webNavigation"
