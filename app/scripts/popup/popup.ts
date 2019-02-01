@@ -1,6 +1,4 @@
-const CodeZenPopUp = {};
-
-(function(c) {
+const CodeZenPopUp = (function(chrome) {
   const init = function() {
     const changeColor = document.getElementById("zenMode");
     if (changeColor) {
@@ -13,15 +11,15 @@ const CodeZenPopUp = {};
     }
   };
 
-  const setColor = function(elem) {
+  const setColor = function(elem: HTMLElement) {
     chrome.storage.sync.get('color', function (data) {
       elem.style.backgroundColor = data.color;
       elem.setAttribute('value', data.color);
     });
   };
 
-  const btnClickListener = function (element) {
-    let color = element.target.value;
+  const btnClickListener = function (element: MouseEvent) {
+    let color = (element.target as HTMLInputElement).value;
     chrome.tabs.query({
       active: true,
       currentWindow: true
@@ -33,7 +31,9 @@ const CodeZenPopUp = {};
     });
   };
 
-  c.init = init;
-})(CodeZenPopUp);
+  return {
+    init: init
+  };
+})(chrome);
 
 document.addEventListener('DOMContentLoaded', CodeZenPopUp.init);

@@ -6,16 +6,18 @@ const {
 } = require("gulp"),
 pump = require('pump'),
 sass = require('gulp-sass'),
-concat = require('gulp-concat'),
+// concat = require('gulp-concat'),
+ts = require("gulp-typescript"),
 base = "./app/",
+script = base + "scripts/",
 appUrl = {
-  bg: base + "background/",
-  contentJs: base + "content/",
+  bg: script + "background/",
+  contentJs: script + "content/",
+  popup: script + "popup/",
+  options: script + "options/",
   allScss: base + "scss/",
   images: base + "images/",
-  options: base + "options/",
-  popup: base + "popup/",
-  xtras: base + "xtras/"
+  xtras: base + "others/"
 },
 distUrl = "./dist",
 contentJs = [
@@ -29,7 +31,7 @@ allScss = [
 ];
 
 contentJs.forEach((f, i, cf) => {
-  cf[i] = appUrl.contentJs + f + ".js";
+  cf[i] = appUrl.contentJs + f + ".ts";
 });
 
 allScss.forEach((f, i, cf) => {
@@ -38,9 +40,9 @@ allScss.forEach((f, i, cf) => {
 
 const handleBg = function (cb) {
   pump([
-    src([appUrl.bg + 'bgCode.js', appUrl.bg + 'background.js']),
-    concat({
-      path: 'bg.min.js'
+    src([appUrl.bg + 'bgCode.ts', appUrl.bg + 'background.ts']),
+    ts({
+      outFile: 'bg.min.js'
     }),
     dest(distUrl)
   ], cb);
@@ -48,8 +50,8 @@ const handleBg = function (cb) {
 handleContentJs = function (cb) {
   pump([
     src(contentJs),
-    concat({
-      path: 'content.min.js'
+    ts({
+      outFile: 'content.min.js'
     }),
     dest(distUrl)
   ], cb);
@@ -60,6 +62,16 @@ handleContentCss = function(cb) {
     sass().on('error', sass.logError),
     dest(distUrl)
   ], cb);
+},
+handleOptionsJs = function () {
+  return src(appUrl.options + '**/*.ts')
+  .pipe(ts())
+  .pipe(dest(distUrl));
+},
+handlePopupJs = function () {
+  return src(appUrl.popup + '**/*.ts')
+  .pipe(ts())
+  .pipe(dest(distUrl));
 },
 copyImages = function() {
   return src(appUrl.images + '**/*.*')
@@ -76,7 +88,9 @@ copyMeta = function (cb) {
 
 // Default Build task
 exports.default = parallel(handleBg, 
-  handleContentJs, 
-  handleContentCss, 
-  copyImages, 
+  handleContentJs,
+  handleOptionsJs,
+  handlePopupJs,
+  handleContentCss,
+  copyImages,
   copyMeta);
