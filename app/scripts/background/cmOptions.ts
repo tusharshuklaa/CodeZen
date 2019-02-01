@@ -32,17 +32,17 @@ namespace CodeZenBg.Cm {
       "children": [{
         "id": "normal",
         "title": "Normal",
-        "type": CodeZen.ContextMenuItemType.radio,
+        "type": ContextMenuItemType.radio,
         "checked": true
       },
       {
         "id": "zen",
         "title": "Zen",
-        "type": CodeZen.ContextMenuItemType.radio
+        "type": ContextMenuItemType.radio
       }, {
         "id": "focus",
         "title": "Focus",
-        "type": CodeZen.ContextMenuItemType.radio
+        "type": ContextMenuItemType.radio
       }]
     },
     "view": {
@@ -51,36 +51,36 @@ namespace CodeZenBg.Cm {
       "children": [{
         "id": "pen",
         "title": "Editor",
-        "type": CodeZen.ContextMenuItemType.radio,
+        "type": ContextMenuItemType.radio,
         "checked": true
       }, {
         "id": "details",
         "title": "Details",
-        "type": CodeZen.ContextMenuItemType.radio
+        "type": ContextMenuItemType.radio
       }, {
         "id": "fullPage",
         "title": "Full Page",
-        "type": CodeZen.ContextMenuItemType.radio
+        "type": ContextMenuItemType.radio
       }, {
         "id": "debug",
         "title": "Debug",
-        "type": CodeZen.ContextMenuItemType.radio
+        "type": ContextMenuItemType.radio
       }, {
         "id": "live",
         "title": "Live (PRO)",
-        "type": CodeZen.ContextMenuItemType.radio
+        "type": ContextMenuItemType.radio
       }, {
         "id": "collab",
         "title": "Collab (PRO)",
-        "type": CodeZen.ContextMenuItemType.radio
+        "type": ContextMenuItemType.radio
       }, {
         "id": "professor",
         "title": "Professor (PRO)",
-        "type": CodeZen.ContextMenuItemType.radio
+        "type": ContextMenuItemType.radio
       }, {
         "id": "presentation",
         "title": "Presentation (PRO)",
-        "type": CodeZen.ContextMenuItemType.radio
+        "type": ContextMenuItemType.radio
       }]
     },
     "layout": {
@@ -89,16 +89,16 @@ namespace CodeZenBg.Cm {
       "children": [{
         "id": "toLeft",
         "title": "Left",
-        "type": CodeZen.ContextMenuItemType.radio,
+        "type": ContextMenuItemType.radio,
         "checked": true
       }, {
         "id": "toTop",
         "title": "Top",
-        "type": CodeZen.ContextMenuItemType.radio
+        "type": ContextMenuItemType.radio
       }, {
         "id": "toRight",
         "title": "Right",
-        "type": CodeZen.ContextMenuItemType.radio
+        "type": ContextMenuItemType.radio
       }]
     },
     "fav": {
