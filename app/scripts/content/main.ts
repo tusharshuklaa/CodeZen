@@ -1,12 +1,19 @@
-namespace CodeZen.Content.Main {
+namespace CodeZenContent.Main {
+  export enum ContextMenuItemId {
+    mode = "mode",
+    changeView = "changeView",
+    layout = "layout",
+    fav = "fav"
+  }
+
   const initListeners = function () {
     chrome.runtime.onMessage.addListener(function (request: CodeZen.TabsMessageData, sender, sendResponse) {
       const reqType = getReqType(request);
       switch (reqType) {
-        case CodeZen.Enums.ContextMenuItemId.mode: mode.init(request._czMode);
+        case ContextMenuItemId.mode: mode.init(request._czMode);
           break;
 
-        case CodeZen.Enums.ContextMenuItemId.changeView: view.init(request._czMode);
+        case ContextMenuItemId.changeView: view.init(request._czMode);
           break;
 
         default:
@@ -19,13 +26,15 @@ namespace CodeZen.Content.Main {
   };
 
   const getReqType = function (req: CodeZen.TabsMessageData): string {
-    const reqMode = (CodeZen.Enums.ContextMenuItemId as any)[req._czMode];
-    return Object.values(CodeZen.Enums.ContextMenuItemId).includes(reqMode) ? reqMode : null;
+    const reqMode = (ContextMenuItemId as any)[req._czMode];
+    return Object.values(ContextMenuItemId).includes(reqMode) ? reqMode : null;
   };
+
+  // Exports
 
   export const init = function () {
     initListeners();
   };
 }
 
-CodeZen.Content.Main.init();
+CodeZenContent.Main.init();

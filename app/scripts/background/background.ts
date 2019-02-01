@@ -1,6 +1,6 @@
 /// <reference path="bgCode.ts" />
 
-namespace CodeZen.Bg {
+namespace CodeZenBg {
   export let activeTabId: number;
   // Handles code that runs on extension installation
   chrome.runtime.onInstalled.addListener(function () {

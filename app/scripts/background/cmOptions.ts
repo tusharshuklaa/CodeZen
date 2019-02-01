@@ -1,6 +1,28 @@
 /// <reference path="bgCode.ts" />
 
-namespace CodeZen.Bg.Cm {
+namespace CodeZenBg.Cm {
+  export enum ContextMenuItemType {
+    normal = "normal",
+    checkbox = "checkbox",
+    radio = "radio",
+    separator = "separator"
+  }
+
+  export enum ContextType {
+    all = "all",
+    page = "page",
+    frame = "frame",
+    selection = "selection",
+    link = "link",
+    editable = "editable",
+    image = "image",
+    video = "video",
+    audio = "audio",
+    launcher = "launcher",
+    browser_action = "browser_action",
+    page_action = "page_action"
+  }
+
   // These are the context menus available on the page
   // ID and Key name has to be same
   const _CONTEXT_MENUS: CodeZen.ContextMenuOptions = {
@@ -10,17 +32,17 @@ namespace CodeZen.Bg.Cm {
       "children": [{
         "id": "normal",
         "title": "Normal",
-        "type": CodeZen.Enums.ContextMenuItemType.radio,
+        "type": CodeZen.ContextMenuItemType.radio,
         "checked": true
       },
       {
         "id": "zen",
         "title": "Zen",
-        "type": CodeZen.Enums.ContextMenuItemType.radio
+        "type": CodeZen.ContextMenuItemType.radio
       }, {
         "id": "focus",
         "title": "Focus",
-        "type": CodeZen.Enums.ContextMenuItemType.radio
+        "type": CodeZen.ContextMenuItemType.radio
       }]
     },
     "view": {
@@ -29,36 +51,36 @@ namespace CodeZen.Bg.Cm {
       "children": [{
         "id": "pen",
         "title": "Editor",
-        "type": CodeZen.Enums.ContextMenuItemType.radio,
+        "type": CodeZen.ContextMenuItemType.radio,
         "checked": true
       }, {
         "id": "details",
         "title": "Details",
-        "type": CodeZen.Enums.ContextMenuItemType.radio
+        "type": CodeZen.ContextMenuItemType.radio
       }, {
         "id": "fullPage",
         "title": "Full Page",
-        "type": CodeZen.Enums.ContextMenuItemType.radio
+        "type": CodeZen.ContextMenuItemType.radio
       }, {
         "id": "debug",
         "title": "Debug",
-        "type": CodeZen.Enums.ContextMenuItemType.radio
+        "type": CodeZen.ContextMenuItemType.radio
       }, {
         "id": "live",
         "title": "Live (PRO)",
-        "type": CodeZen.Enums.ContextMenuItemType.radio
+        "type": CodeZen.ContextMenuItemType.radio
       }, {
         "id": "collab",
         "title": "Collab (PRO)",
-        "type": CodeZen.Enums.ContextMenuItemType.radio
+        "type": CodeZen.ContextMenuItemType.radio
       }, {
         "id": "professor",
         "title": "Professor (PRO)",
-        "type": CodeZen.Enums.ContextMenuItemType.radio
+        "type": CodeZen.ContextMenuItemType.radio
       }, {
         "id": "presentation",
         "title": "Presentation (PRO)",
-        "type": CodeZen.Enums.ContextMenuItemType.radio
+        "type": CodeZen.ContextMenuItemType.radio
       }]
     },
     "layout": {
@@ -67,16 +89,16 @@ namespace CodeZen.Bg.Cm {
       "children": [{
         "id": "toLeft",
         "title": "Left",
-        "type": CodeZen.Enums.ContextMenuItemType.radio,
+        "type": CodeZen.ContextMenuItemType.radio,
         "checked": true
       }, {
         "id": "toTop",
         "title": "Top",
-        "type": CodeZen.Enums.ContextMenuItemType.radio
+        "type": CodeZen.ContextMenuItemType.radio
       }, {
         "id": "toRight",
         "title": "Right",
-        "type": CodeZen.Enums.ContextMenuItemType.radio
+        "type": CodeZen.ContextMenuItemType.radio
       }]
     },
     "fav": {
@@ -84,7 +106,7 @@ namespace CodeZen.Bg.Cm {
       "title": "Add to Favourites"
     }
   },
-  _CONTEXT_MENUS_CONTEXT: CodeZen.Enums.ContextType[] = [CodeZen.Enums.ContextType.all];
+  _CONTEXT_MENUS_CONTEXT: ContextType[] = [ContextType.all];
 
   const createCm = function (): void {
     for (const m in _CONTEXT_MENUS) {
