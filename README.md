@@ -2,6 +2,8 @@
 
 CodeZen is a chrome extension aimed at providing various features/quick tools for codepen.io. The extension can help in various tasks such as providing distraction free view via ZEN Mode or Focus Mode. It can also help in managing Favorites. More on it's features and development plans can be found below.
 
+![picture alt](https://raw.githubusercontent.com/tusharshuklaa/CodeZen/master/app/images/cz-icon-512.png "SaSSEase - A Mixins Lab")
+
 ## Features
 1. **FOCUS Mode** - A distraction free mode that focuses on editor (code) pane only and nothing else (available via context menu).
 2. **ZEN Mode** - A distraction free mode (along with full screen) that focuses on editor (code) pane only and nothing else. (available via context menu)
