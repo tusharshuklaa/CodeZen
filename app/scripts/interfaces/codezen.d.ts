@@ -1,11 +1,4 @@
 declare namespace CodeZen {
-  export interface BGScript {
-    init: () => void;
-    pageNavigated: () => void;
-    URL: string;
-    activeTabId: number;
-  }
-
   export interface ContextMenuItem extends chrome.contextMenus.CreateProperties {}
 
   export interface ContextMenu extends chrome.contextMenus.CreateProperties {
@@ -29,11 +22,6 @@ declare namespace CodeZen {
     msRequestFullscreen(): Promise<void>;
   }
 
-  export interface FullScreenResponse {
-    open(): void;
-    close(): void;
-  }
-
   export interface FSDocument extends Document {
     // exitFullscreen: () => void;
     mozCancelFullScreen: () => void;
@@ -43,13 +31,5 @@ declare namespace CodeZen {
     mozFullScreenElement(): Element;
     webkitFullscreenElement(): Element;
     msFullscreenElement(): Element;
-  }
-
-  export interface Utils {
-    isFullScreen(): boolean;
-    fullScreen(elem: HTMLElementWithFullScreenApi): FullScreenResponse;
-    elems(elem: string): NodeListOf<HTMLElementWithFullScreenApi>;
-    elem(elem: string): HTMLElementWithFullScreenApi;
-    classPrefix: string;
   }
 }

@@ -2,6 +2,8 @@
 
 This extension provides various features/quick tools for coding on codepen.io
 
+![picture alt](https://raw.githubusercontent.com/tusharshuklaa/CodeZen/master/app/images/cz-icon-512.png "SaSSEase - A Mixins Lab")
+
 ## Features
 * ZEN Mode = Full screen
 * FOCUS Mode

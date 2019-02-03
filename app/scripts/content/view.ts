@@ -1,3 +1,5 @@
+/// <reference path="utils.ts" />
+
 namespace CodeZenContent {
 
   export const CZView = (function (u) {

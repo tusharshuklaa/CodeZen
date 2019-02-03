@@ -1,3 +1,5 @@
+/// <reference path="utils.ts" />
+
 namespace CodeZenContent.Main {
   export enum ContextMenuItemId {
     mode = "mode",
