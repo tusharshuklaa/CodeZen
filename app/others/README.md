@@ -1,6 +1,7 @@
 # CodeZen - Quick Tools for CodePen
 
 This extension provides various features/quick tools for coding on codepen.io
+
 <p align="center">
 <img width="512" height="512" src="https://raw.githubusercontent.com/tusharshuklaa/CodeZen/master/app/images/cz-icon-512.png" alt="CodeZen - Tools for CodePen - Logo" />
 </p>
