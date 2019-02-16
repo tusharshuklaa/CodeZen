@@ -1,6 +1,5 @@
 const {
   parallel,
-  series,
   src,
   dest
 } = require("gulp"),
@@ -22,7 +21,9 @@ appUrl = {
 distUrl = "./dist",
 contentJs = [
   "utils",
-  "main"
+  "main",
+  "mode",
+  "view"
 ],
 allScss = [
   "content",
@@ -40,7 +41,7 @@ allScss.forEach((f, i, cf) => {
 
 const handleBg = function (cb) {
   pump([
-    src([appUrl.bg + 'bgCode.ts', appUrl.bg + 'background.ts']),
+    src([appUrl.bg + 'bgCode.ts', appUrl.bg + 'background.ts', appUrl.bg + 'cmOptions.ts']),
     ts({
       outFile: 'bg.min.js'
     }),

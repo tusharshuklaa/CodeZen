@@ -1,4 +1,4 @@
-namespace CodeZenBg {
+namespace CodeZen.Bg {
   export const _SCHEME: string = "https://",
     _HOST: string = "codepen.io",
     FRAME_URL: string = _SCHEME + "s." + _HOST + "/",
@@ -34,7 +34,7 @@ namespace CodeZenBg {
   export const init = function (): void {
     handleDeclarativeContent();
     setDefaults();
-    CodeZenBg.Cm.create();
+    CodeZen.Bg.Cm.create();
   };
 
   /**

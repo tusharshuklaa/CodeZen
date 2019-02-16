@@ -1,6 +1,6 @@
-/// <reference path="bgCode.ts" />
+/// <reference path="../dto/codezen.ts" />
 
-namespace CodeZenBg.Cm {
+namespace CodeZen.Bg.Cm {
   export enum ContextMenuItemType {
     normal = "normal",
     checkbox = "checkbox",
@@ -25,7 +25,7 @@ namespace CodeZenBg.Cm {
 
   // These are the context menus available on the page
   // ID and Key name has to be same
-  const _CONTEXT_MENUS: CodeZen.ContextMenuOptions = {
+  const _CONTEXT_MENUS: IContextMenuOptions = {
     "modes": {
       "id": "mode",
       "title": "Mode",
@@ -110,7 +110,7 @@ namespace CodeZenBg.Cm {
 
   const createCm = function (): void {
     for (const m in _CONTEXT_MENUS) {
-      const menu: CodeZen.ContextMenu = JSON.parse(JSON.stringify((_CONTEXT_MENUS as any)[m]));
+      const menu: IContextMenu = JSON.parse(JSON.stringify((_CONTEXT_MENUS as any)[m]));
       if (_CONTEXT_MENUS.hasOwnProperty(m) && typeof menu === "object") {
         _updateContextMenuConfig(menu);
         if (menu.children) {
@@ -127,18 +127,18 @@ namespace CodeZenBg.Cm {
     }
   };
 
-  const _createMenu = function (menu: CodeZen.ContextMenu) {
+  const _createMenu = function (menu: IContextMenu) {
     chrome.contextMenus.create(menu);
   };
 
-  const _updateContextMenuConfig = function (menu: CodeZen.ContextMenu) {
+  const _updateContextMenuConfig = function (menu: IContextMenu) {
     menu.id = EXT_NAME + menu.id;
     menu.contexts = _CONTEXT_MENUS_CONTEXT;
     menu.documentUrlPatterns = [URL + "*", FRAME_URL + "*"];
     menu.targetUrlPatterns = [URL + "*", FRAME_URL + "*"];
   };
 
-  const _createSubMenus = function (c: CodeZen.ContextMenuItem, menu: CodeZen.ContextMenu) {
+  const _createSubMenus = function (c: IContextMenuItem, menu: IContextMenu) {
     c.parentId = menu.id;
     c.id = menu.id + "_-_" + c.id;
     c.contexts = _CONTEXT_MENUS_CONTEXT;

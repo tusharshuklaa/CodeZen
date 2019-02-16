@@ -1,13 +1,14 @@
-namespace CodeZenContent {
-  declare var document: CodeZen.FSDocument;
+/// <reference path="../dto/codezen.ts" />
+namespace CodeZen.Content {
+  declare var document: CodeZen.IFSDocument;
 
   export const classPrefix: string = "_codeZen_mode_";
 
-  export const elems = function (sel: string): NodeListOf<CodeZen.HTMLElementWithFullScreenApi> {
+  export const elems = function (sel: string): NodeListOf<CodeZen.IHTMLElementWithFullScreenApi> {
     return document.querySelectorAll(sel);
   };
 
-  export const elem = function (sel: string): CodeZen.HTMLElementWithFullScreenApi {
+  export const elem = function (sel: string): CodeZen.IHTMLElementWithFullScreenApi {
     return this.elems(sel)[0];
   }
 
@@ -21,9 +22,9 @@ namespace CodeZenContent {
     /**
      * Open any element in fullscreen mode
      * If no element is provided, default behaviour is to make body element go full screen
-     * @param {CodeZen.HTMLElementWithFullScreenApi} elem
+     * @param {CodeZen.IHTMLElementWithFullScreenApi} elem
     */
-    public static open(el: CodeZen.HTMLElementWithFullScreenApi = elem("body")): void {
+    public static open(el: CodeZen.IHTMLElementWithFullScreenApi = elem("body")): void {
       if (el.requestFullscreen) {
         el.requestFullscreen();
       } else if (el.mozRequestFullScreen) { /* Firefox */
@@ -59,7 +60,7 @@ namespace CodeZenContent {
      *
      * @returns {boolean}
     */
-    private status = function (): boolean {
+    public static status = function (): boolean {
       return !!(document.fullscreenElement ||
         document.webkitFullscreenElement ||
         document.mozFullScreenElement ||

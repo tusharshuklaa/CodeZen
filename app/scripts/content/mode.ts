@@ -1,6 +1,6 @@
-/// <reference path="utils.ts" />
+/// <reference path="../dto/codezen.ts" />
 
-namespace CodeZenContent.Mode {
+namespace CodeZen.Content.Mode {
   let _INIT_EDITOR_PANE_WIDTH = "";
   const mode = {
     "zen": {
@@ -33,16 +33,16 @@ namespace CodeZenContent.Mode {
     }
   };
 
-  const _resetMode = function (rootElem: CodeZen.HTMLElementWithFullScreenApi) {
+  const _resetMode = function (rootElem: IHTMLElementWithFullScreenApi) {
     rootElem.classList.forEach(className => {
-      if (className.startsWith(classPrefix)) {
+      if ((<any>className).startsWith(classPrefix)) {
         rootElem.classList.remove(className);
       }
     });
     FullScreen.close();
   };
 
-  const _normalMode = function (editorPane: CodeZen.HTMLElementWithFullScreenApi) {
+  const _normalMode = function (editorPane: IHTMLElementWithFullScreenApi) {
     if (editorPane) {
       if (_INIT_EDITOR_PANE_WIDTH) {
         editorPane.style.width = _INIT_EDITOR_PANE_WIDTH;
@@ -52,8 +52,8 @@ namespace CodeZenContent.Mode {
     }
   };
 
-  const _abnormalMode = function (rootElem: CodeZen.HTMLElementWithFullScreenApi,
-    modeClass: string, editorPane: CodeZen.HTMLElementWithFullScreenApi, type: string) {
+  const _abnormalMode = function (rootElem: IHTMLElementWithFullScreenApi,
+    modeClass: string, editorPane: IHTMLElementWithFullScreenApi, type: string) {
     rootElem.classList.add(modeClass);
     _INIT_EDITOR_PANE_WIDTH = editorPane && editorPane.style.width.indexOf("100%") === -1 ?
       editorPane.style.width : _INIT_EDITOR_PANE_WIDTH;

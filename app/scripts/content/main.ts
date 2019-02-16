@@ -1,6 +1,6 @@
-/// <reference path="utils.ts" />
+/// <reference path="../dto/codezen.ts" />
 
-namespace CodeZenContent.Main {
+namespace CodeZen.Content.Main {
   export enum ContextMenuItemId {
     mode = "mode",
     changeView = "changeView",
@@ -9,13 +9,13 @@ namespace CodeZenContent.Main {
   }
 
   const initListeners = function () {
-    chrome.runtime.onMessage.addListener(function (request: CodeZen.TabsMessageData, sender, sendResponse) {
+    chrome.runtime.onMessage.addListener(function (request: ITabsMessageData, sender, sendResponse) {
       const reqType = getReqType(request);
       switch (reqType) {
-        case ContextMenuItemId.mode: mode.init(request._czMode);
+        case ContextMenuItemId.mode: Content.Mode.init(request._czMode);
           break;
 
-        case ContextMenuItemId.changeView: view.init(request._czMode);
+        case ContextMenuItemId.changeView: CodeZen.Content.View.init(request._czMode);
           break;
 
         default:
@@ -27,9 +27,9 @@ namespace CodeZenContent.Main {
     });
   };
 
-  const getReqType = function (req: CodeZen.TabsMessageData): string {
+  const getReqType = function (req: ITabsMessageData): string {
     const reqMode = (ContextMenuItemId as any)[req._czMode];
-    return Object.values(ContextMenuItemId).includes(reqMode) ? reqMode : null;
+    return (<any>Object).values(ContextMenuItemId).includes(reqMode) ? reqMode : null;
   };
 
   // Exports
@@ -39,4 +39,4 @@ namespace CodeZenContent.Main {
   };
 }
 
-CodeZenContent.Main.init();
+CodeZen.Content.Main.init();

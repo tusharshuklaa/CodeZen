@@ -1,28 +1,28 @@
-declare namespace CodeZen {
-  export interface ContextMenuItem extends chrome.contextMenus.CreateProperties {}
+namespace CodeZen {
+  export interface IContextMenuItem extends chrome.contextMenus.CreateProperties {}
 
-  export interface ContextMenu extends chrome.contextMenus.CreateProperties {
+  export interface IContextMenu extends chrome.contextMenus.CreateProperties {
     children?: chrome.contextMenus.CreateProperties[];
   }
 
-  export interface ContextMenuOptions {
-    modes: ContextMenu;
-    view: ContextMenu;
-    layout: ContextMenu;
-    fav: ContextMenu;
+  export interface IContextMenuOptions {
+    modes: IContextMenu;
+    view: IContextMenu;
+    layout: IContextMenu;
+    fav: IContextMenu;
   }
 
-  export interface TabsMessageData {
+  export interface ITabsMessageData {
     _czMode?: string;
   }
 
-  export interface HTMLElementWithFullScreenApi extends HTMLElement {
+  export interface IHTMLElementWithFullScreenApi extends HTMLElement {
     mozRequestFullScreen(): Promise<void>;
     webkitRequestFullscreen(): Promise<void>;
     msRequestFullscreen(): Promise<void>;
   }
 
-  export interface FSDocument extends Document {
+  export interface IFSDocument extends Document {
     // exitFullscreen: () => void;
     mozCancelFullScreen: () => void;
     webkitExitFullscreen: () => void;
